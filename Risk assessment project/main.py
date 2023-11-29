@@ -3,16 +3,21 @@
 import requests
 import json 
 
-# Retrieve the 10-K reports from EDGAR
-# WALMART 
+# Retrieve the 10-K reports from EDGAR for WALMART 
 # Define the API endpoint
 url = 'https://data.sec.gov/submissions/CIK0000104169.json'
 
 # Send the API request
 response = requests.get(url)
 
-# Parse the JSON response
-data = response.json()
+# Check if the response is valid JSON
+try:
+    data = response.json()
+except json.decoder.JSONDecodeError:
+    print("The response is not a valid JSON string.")
+    print("Response text: ", response.text)
+    # Parse the response text into a dictionary
+    data = json.loads(response.text)
 
 # Extract the URL of the 10K report
 report_url = data['filings'][0]['url']
